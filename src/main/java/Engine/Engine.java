@@ -13,7 +13,9 @@ import java.util.Collections;
  * Created by popka on 20.04.15.
  */
 public class Engine {
-    private RandomGenerator washingGenerate;
+    private double lambdaWashing;
+    private double lambdaPolisher;
+    private RandomGenerator random = new RandomGenerator();
     private RandomGenerator polisherGenerate;
     private Parking parking;
     private Workers workers;
@@ -22,15 +24,16 @@ public class Engine {
     ArrayList<Car> cars;
 
     public Engine(double lambdaWashing, double lambdaPolisher) {
-        washingGenerate = new RandomGenerator(lambdaWashing);
-        polisherGenerate = new RandomGenerator(lambdaPolisher);
-
-        parking = new Parking(3);
-        workers = new Workers(3);
+        this.lambdaWashing = lambdaWashing;
+        this.lambdaPolisher =lambdaPolisher;
 
     }
 
     public void start() {
+
+
+        parking = new Parking(1);
+        workers = new Workers(3);
         generateTransact();
 
         int generate=0;
@@ -63,10 +66,11 @@ public class Engine {
 
                     if (currentCar.getType() == Car.CAR_TO_WASHING)
                         if (workers.isFree(time, 1)) {
-                            Car car = parking.removeFirst();
-                            workers.enter(1, time, 4);
+                            parking.removeFirst();
+                            double advance = random.randomExp((double)1/4);
+                            workers.enter(1, time, advance);
                             currentCar.setState(Car.IN_PROCESS);
-                            currentCar.setTime(time + 4);
+                            currentCar.setTime(time + advance);
                         } else {
                             currentCar.setTime(workers.getNearFreeTime(1));
                         }
@@ -74,18 +78,21 @@ public class Engine {
                     if (currentCar.getType() == Car.CAR_TO_POLISHER) {
                         if (workers.isFree(time, 2)) {
                             parking.removeFirst();
-                            workers.enter(2, time, 15);
+                            double advance = random.randomExp((double)1/15);
+                            workers.enter(2, time, advance);
                             currentCar.setState(Car.IN_PROCESS);
-                            currentCar.setTime(time + 15);
+                            currentCar.setTime(time + advance);
                         } else {
                             currentCar.setTime(workers.getNearFreeTime(2));
                         }
                     }
 
                     break;
-                //case Car.WASHING_PARKING:
+                case Car.WASHING_PARKING:
 
-                //break;
+                break;
+
+
                 case Car.IN_PROCESS:
                     cars.remove(currentCar);
                     terminate++;
@@ -98,7 +105,7 @@ public class Engine {
 
         }
 
-        System.out.println("gen = " + generate + "  ter" + terminate);
+        //System.out.println("gen = " + generate + "  ter" + terminate);
     }
 
     public void generateTransact() {
@@ -106,20 +113,24 @@ public class Engine {
 
         double time = 0;
         while (time < 480) {
-            time += washingGenerate.nextExp();
+            time += random.randomExp(lambdaWashing);
             if (time < 480)
                 cars.add(new WashingCar(time));
         }
 
         time = 0;
         while (time < 480) {
-            time += washingGenerate.nextExp();
+            time += random.randomExp(lambdaPolisher);
             if (time < 480)
                 cars.add(new PolisherCar(time));
         }
 
         Collections.sort(cars);
 
-        System.out.println(cars);
+     //   System.out.println(cars);
+    }
+
+    public int getResult() {
+        return parking.getUnserviced();
     }
 }

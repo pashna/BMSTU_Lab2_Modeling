@@ -12,7 +12,13 @@ public class Main {
 
         Engine engine = new Engine(lambdaArriveWashing, lambdaArrivePolisher);
 
-        engine.start();
+        int result = 0;
+        for (int j = 0; j < 300; j++) {
+            engine.start();
+            result += engine.getResult();
+        }
+        System.out.println(result/300);
+
 
         //engine.generateTransact();
 

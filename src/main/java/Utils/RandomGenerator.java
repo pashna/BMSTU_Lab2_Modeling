@@ -6,17 +6,11 @@ import java.util.Random;
  * Created by popka on 20.04.15.
  */
 public class RandomGenerator {
-    Random random;
-    double lambda;
+    Random random = new Random();
 
-    public RandomGenerator(double lambda) {
-        this.lambda = lambda;
-        random = new Random();
-    }
 
-    public double nextExp() {
+    public double randomExp(double lambda) {
         double doubleNumber = random.nextDouble();
-
         return Math.log(1-doubleNumber)/(-lambda);
     }
 

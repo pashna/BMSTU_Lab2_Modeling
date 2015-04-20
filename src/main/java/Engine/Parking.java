@@ -19,6 +19,10 @@ public class Parking {
         carQueue = new LinkedList<Car>();
     }
 
+    public int getUnserviced() {
+        return unserviced;
+    }
+
     public boolean add(Car car) {
         if (carQueue.size() < maxCount) {
             carQueue.addLast(car);
@@ -41,6 +45,11 @@ public class Parking {
 
     public void incrementUnserviced() {
         unserviced++;
+    }
+
+    public void clear() {
+        unserviced = 0;
+        carQueue.clear();
     }
 
 }

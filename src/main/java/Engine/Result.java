@@ -11,6 +11,5 @@ public class Result {
     public Result(Workers workers, Parking parking) {
         this.unserviced = parking.getUnserviced();
 
-
     }
 }

@@ -31,8 +31,7 @@ public class Engine {
 
     public void start() {
 
-
-        parking = new Parking(1);
+        parking = new Parking(3);
         workers = new Workers(3);
         generateTransact();
 
@@ -130,7 +129,14 @@ public class Engine {
      //   System.out.println(cars);
     }
 
-    public int getResult() {
+    public int getUnserviced() {
         return parking.getUnserviced();
     }
+
+    public double getUtils() {
+
+        return workers.getUtils()/(workers.getCountOfWorkers()*480);
+    }
+
+
 }

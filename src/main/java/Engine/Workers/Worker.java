@@ -24,6 +24,10 @@ public class Worker implements Comparable{
         return startTime+duration;
     }
 
+    public double getActiveTime() {
+        return activeTime;
+    }
+
     @Override
     public int compareTo(Object obj) {
         Worker worker = (Worker) obj;

@@ -10,12 +10,25 @@ public class Workers {
     private int countOfWorkers;
     private Worker[] workers;
 
+
     public Workers(int countOfWorkers) {
         this.countOfWorkers = countOfWorkers;
         workers = new Worker[countOfWorkers];
         for (int i=0; i<countOfWorkers; i++) {
             workers[i] = new Worker();
         }
+    }
+
+    public int getCountOfWorkers() {
+        return countOfWorkers;
+    }
+
+    public double getUtils() {
+        double activeTime = 0;
+        for (int i=0; i<countOfWorkers; i++) {
+            activeTime += workers[i].getActiveTime();
+        }
+        return activeTime;
     }
 
     public boolean isFree(double time, int count) {

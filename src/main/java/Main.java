@@ -11,12 +11,13 @@ public class Main {
 
         int result = 0;
         double utils = 0;
-        for (int j = 0; j < 300; j++) {
+        int DAYS = 300;
+        for (int j = 0; j < DAYS; j++) {
             engine.start();
             result += engine.getUnserviced();
             utils += engine.getUtils();
         }
-        System.out.println("unserviced=" + result / 300 + "  utils=" + utils/300);
+        System.out.println("unserviced=" + result / DAYS + "  utils=" + utils/DAYS);
 
 
         //engine.generateTransact();

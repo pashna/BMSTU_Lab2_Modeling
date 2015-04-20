@@ -48,8 +48,14 @@ public class Car implements Comparable{
             return 1;
         if (this.time < car.time)
             return -1;
-        else
-            return 0;
+        else { // Если время одинаково, смотрим по статусу
+            if (this.state > car.state)
+                return -1;
+            if (this.state < car.state)
+                return 1;
+            else
+                return 0;
+        }
     }
 
     public int getState() {

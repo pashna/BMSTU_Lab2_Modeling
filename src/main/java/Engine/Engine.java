@@ -42,13 +42,16 @@ public class Engine {
             double time = cars.get(0).getTime();
             switch (cars.get(0).getState()) {
 
+
                 case Car.NOT_EXIST:
                     currentCar.setState(Car.ARRIVED);
                     generate++;
                     break;
 
 
+
                 case Car.ARRIVED:
+
                     if (mainParking.isFull()) {
                         mainParking.incrementUnserviced();
                         cars.remove(0);
@@ -60,15 +63,14 @@ public class Engine {
                     break;
 
 
+
                 case Car.MAIN_PARKING:
 
                     if (currentCar.getType() == Car.CAR_TO_WASHING)
-                        if (workers.isFree(time, 1)) {
+                        if (!washingParking.isFull()) {
                             mainParking.removeFirst();
-                            double advance = random.randomExp(LAMBDA_WASHING);
-                            workers.enter(1, time, advance);
-                            currentCar.setState(Car.IN_PROCESS);
-                            currentCar.setTime(time + advance);
+                            currentCar.setState(Car.WASHING_PARKING);
+                            washingParking.add(currentCar);
                         } else {
                             currentCar.setTime(workers.getNearFreeTime(1));
                         }
@@ -84,11 +86,22 @@ public class Engine {
                             currentCar.setTime(workers.getNearFreeTime(2));
                         }
                     }
-
                     break;
-                case Car.WASHING_PARKING:
 
-                break;
+
+
+                case Car.WASHING_PARKING:
+                    if (workers.isFree(time, 1)) {
+                        washingParking.removeFirst();
+                        double advance = random.randomExp(LAMBDA_WASHING);
+                        workers.enter(1, time, advance);
+                        currentCar.setState(Car.IN_PROCESS);
+                        currentCar.setTime(time + advance);
+                    } else {
+                        currentCar.setTime(workers.getNearFreeTime(1));
+                    }
+                    break;
+
 
 
                 case Car.IN_PROCESS:

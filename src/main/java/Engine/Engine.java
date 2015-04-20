@@ -9,30 +9,29 @@ import Utils.RandomGenerator;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static Engine.Config.*;
+
 /**
  * Created by popka on 20.04.15.
  */
 public class Engine {
-    private double lambdaWashing;
-    private double lambdaPolisher;
+
     private RandomGenerator random = new RandomGenerator();
-    private RandomGenerator polisherGenerate;
-    private Parking parking;
+    private Parking mainParking;
+    private Parking washingParking;
     private Workers workers;
 
 
     ArrayList<Car> cars;
 
-    public Engine(double lambdaWashing, double lambdaPolisher) {
-        this.lambdaWashing = lambdaWashing;
-        this.lambdaPolisher =lambdaPolisher;
-
+    public Engine() {
     }
 
     public void start() {
 
-        parking = new Parking(3);
-        workers = new Workers(3);
+        mainParking = new Parking(MAIN_PARKING_COUNT);
+        workers = new Workers(WORKERS_COUNT);
+        washingParking = new Parking(WASHING_PARKING_COUNT);
         generateTransact();
 
         int generate=0;
@@ -50,12 +49,12 @@ public class Engine {
 
 
                 case Car.ARRIVED:
-                    if (parking.isFull()) {
-                        parking.incrementUnserviced();
+                    if (mainParking.isFull()) {
+                        mainParking.incrementUnserviced();
                         cars.remove(0);
                     }
                     else {
-                        parking.add(currentCar);
+                        mainParking.add(currentCar);
                         currentCar.setState(Car.MAIN_PARKING);
                     }
                     break;
@@ -65,8 +64,8 @@ public class Engine {
 
                     if (currentCar.getType() == Car.CAR_TO_WASHING)
                         if (workers.isFree(time, 1)) {
-                            parking.removeFirst();
-                            double advance = random.randomExp((double)1/4);
+                            mainParking.removeFirst();
+                            double advance = random.randomExp(LAMBDA_WASHING);
                             workers.enter(1, time, advance);
                             currentCar.setState(Car.IN_PROCESS);
                             currentCar.setTime(time + advance);
@@ -76,8 +75,8 @@ public class Engine {
 
                     if (currentCar.getType() == Car.CAR_TO_POLISHER) {
                         if (workers.isFree(time, 2)) {
-                            parking.removeFirst();
-                            double advance = random.randomExp((double)1/15);
+                            mainParking.removeFirst();
+                            double advance = random.randomExp(LAMBDA_POLISHING);
                             workers.enter(2, time, advance);
                             currentCar.setState(Car.IN_PROCESS);
                             currentCar.setTime(time + advance);
@@ -111,31 +110,29 @@ public class Engine {
         cars = new ArrayList<Car>();
 
         double time = 0;
-        while (time < 480) {
-            time += random.randomExp(lambdaWashing);
-            if (time < 480)
+        while (time < MAX_TIME) {
+            time += random.randomExp(LAMBDA_ARRIVE_WASHING);
+            if (time < MAX_TIME)
                 cars.add(new WashingCar(time));
         }
 
         time = 0;
-        while (time < 480) {
-            time += random.randomExp(lambdaPolisher);
-            if (time < 480)
+        while (time < MAX_TIME) {
+            time += random.randomExp(LAMBDA_ARRIVE_POLISHING);
+            if (time < MAX_TIME)
                 cars.add(new PolisherCar(time));
         }
 
         Collections.sort(cars);
 
-     //   System.out.println(cars);
     }
 
     public int getUnserviced() {
-        return parking.getUnserviced();
+        return mainParking.getUnserviced();
     }
 
     public double getUtils() {
-
-        return workers.getUtils()/(workers.getCountOfWorkers()*480);
+        return workers.getUtils()/(workers.getCountOfWorkers()*MAX_TIME);
     }
 
 

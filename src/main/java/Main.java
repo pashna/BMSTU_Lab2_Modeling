@@ -6,10 +6,8 @@ import Engine.Engine;
 public class Main {
 
     public static void main(String args[ ]) {
-        double lambdaArrivePolisher = (double)1/30;
-        double lambdaArriveWashing = (double)1/5;
 
-        Engine engine = new Engine(lambdaArriveWashing, lambdaArrivePolisher);
+        Engine engine = new Engine();
 
         int result = 0;
         double utils = 0;

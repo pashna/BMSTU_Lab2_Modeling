@@ -19,10 +19,16 @@ public class Workers {
         }
     }
 
+    /*
+    Возвращает количество рабочих
+     */
     public int getCountOfWorkers() {
         return countOfWorkers;
     }
 
+    /*
+    Возвращает все время, в которое рабочие были активны
+     */
     public double getUtils() {
         double activeTime = 0;
         for (int i=0; i<countOfWorkers; i++) {
@@ -31,6 +37,9 @@ public class Workers {
         return activeTime;
     }
 
+    /*
+    Свободно ли количество рабочих count в момент времени time
+     */
     public boolean isFree(double time, int count) {
         int freeCount = 0;
         for (int i=0; i<countOfWorkers; i++) {
@@ -43,6 +52,9 @@ public class Workers {
             return false;
     }
 
+    /*
+    Занять количество рабочих count, в time на duration
+     */
     public void enter(int count, double time, double duration) {
         int seizedCount = 0;
         for (int i=0; i<countOfWorkers; i++) {
@@ -55,6 +67,9 @@ public class Workers {
         }
     }
 
+    /*
+    Возвращает ближайшее время освобождения count-работников
+     */
     public double getNearFreeTime(int count) {
         Arrays.sort(workers);
         return workers[count-1].getReleaseTime() + 0.00001;

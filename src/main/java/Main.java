@@ -9,15 +9,15 @@ public class Main {
 
         Engine engine = new Engine();
 
-        int result = 0;
+        int countUnserviced = 0;
         double utils = 0;
         int DAYS = 300;
         for (int j = 0; j < DAYS; j++) {
             engine.start();
-            result += engine.getUnserviced();
+            countUnserviced += engine.getUnserviced();
             utils += engine.getUtils();
         }
-        System.out.println("unserviced=" + result / DAYS + "  utils=" + utils/DAYS);
+        System.out.println("unserviced=" + countUnserviced / DAYS + "  utils=" + utils/DAYS);
 
 
         //engine.generateTransact();

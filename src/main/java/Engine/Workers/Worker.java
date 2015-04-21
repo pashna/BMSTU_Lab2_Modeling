@@ -8,22 +8,34 @@ public class Worker implements Comparable{
     private double startTime;
     private double duration;
 
+    /*
+    Занять рабочего начиная с времени StartTime на duration единиц времени
+     */
     public void seize(double startTime, double duration) {
         activeTime += duration;
         this.duration = duration;
         this.startTime = startTime;
     }
 
+    /*
+    Свободен ли рабочий в момент времени time
+     */
     public boolean isFree(double time) {
         if (startTime+duration < time)
             return true;
         return false;
     }
 
+    /*
+    Возвращает время освобождения рабочего
+     */
     public double getReleaseTime() {
         return startTime+duration;
     }
 
+    /*
+    Возвращает время, когда рабочий работал (для utils)
+     */
     public double getActiveTime() {
         return activeTime;
     }

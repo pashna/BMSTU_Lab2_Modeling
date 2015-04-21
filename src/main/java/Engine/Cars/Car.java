@@ -8,11 +8,14 @@ import java.text.DecimalFormat;
 public class Car implements Comparable{
 
 
-    private int type;
-    private double time;
+    private int type; // "Цель визита"
+    private double time; // Время события
+
+    // Цели визита
     public final static int CAR_TO_WASHING = 1;
     public final static int CAR_TO_POLISHER = 2;
 
+    // Состояния
     public final static int NOT_EXIST = 0;
     public final static int ARRIVED = 1;
     public final static int MAIN_PARKING = 2;
@@ -20,7 +23,7 @@ public class Car implements Comparable{
     public final static int IN_PROCESS = 4;
 
 
-
+    // Состояние
     private int state;
 
     public Car(double time, int type) {
